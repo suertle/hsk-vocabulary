@@ -14999,4 +14999,7 @@ export default [
     w: "v",
     t: "leak (information), divulge",
   }
-]
+].map(word => {
+  word.d = 'HSK 6'
+  return word
+})

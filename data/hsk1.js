@@ -899,4 +899,7 @@ export default [
     w: "v",
     t: "do",
   },
-]
+].map(word => {
+  word.d = 'HSK 1'
+  return word
+})

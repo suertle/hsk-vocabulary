@@ -7799,4 +7799,7 @@ export default [
     w: "-",
     t: "as soon as possible",
   }
-]
+].map(word => {
+  word.d = 'HSK 5'
+  return word
+})

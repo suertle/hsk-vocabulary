@@ -3599,4 +3599,7 @@ export default [
     w: "n",
     t: "place to sit, seat",
   }
-]
+].map(word => {
+  word.d = 'HSK 4'
+  return word
+})
