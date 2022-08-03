@@ -35,11 +35,11 @@ const initResetPool = (dataset) => {
 const initPool = initResetPool(initDataset)
 
 export default function Vocab() {
-  console.log('Render')
   const [pool, setPool] = useState(initPool) // list of word prepare for pickup
   const [history, setHistory] = useState([]) // temporary list for keeping previous picked word
   const [cursor, setCursor] = useState(0) // index of word to show on screen
   const [dataset, setDataset] = useState(initDataset) // select data to remain in word pool
+  const [hidden, setHidden] = useState([false, false, false])
 
   // initial
   useEffect(() => {
@@ -76,10 +76,16 @@ export default function Vocab() {
     setCookie(`vocab_chinese_dataset_hsk${index}`, e.target.checked)
   }
 
+  const toggleHidden = (index) => {
+    setHidden(hidden.map((value, i) => {
+      return i == index ? ! value : value
+    }))
+  }
+
   return (
     <div>
       <Head>
-        <title>Vocabulary</title>
+        <title>Chinese Vocabulary</title>
         <meta name="description" content="Vocabulary List" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
@@ -89,21 +95,36 @@ export default function Vocab() {
         { history.length > 0 && (
           <div className="text-center text-white bg-gray-800">
             <div className="py-5 container mx-auto">
-              <div className="text-xs">{ `${pool.length} words remaining` }</div>
               <div className="py-4">
                 <button type="button" className="bg-blue-500 hover:bg-blue-600 disabled:bg-gray-400 text-white p-2 rounded mr-3" onClick={prevWord} disabled={cursor >= history.length - 1}>&#60; Prev</button>
                 <button type="button" className="bg-blue-500 hover:bg-blue-600 disabled:bg-gray-400 text-white p-2 rounded" onClick={nextWord} disabled={! pool.length && cursor === 0}>Next &#62;</button>
               </div>
-              <div className="py-4 text-9xl">{ history[cursor].c }</div>
-              <div className="py-4 text-5xl">{ history[cursor].p }</div>
-              <div className="py-4 text-4xl">({ history[cursor].w }.) { history[cursor].t }</div>
+              <div className="py-3 text-9xl">
+                <button className={`p-2 cursor-pointer border rounded-lg ${ hidden[0] ? 'text-gray-800' : 'border-gray-800' }`} onClick={(e) => toggleHidden(0)}>
+                  { history[cursor].c }
+                </button>
+              </div>
+              <div className="py-3 text-5xl">
+                <button className={`p-2 cursor-pointer border rounded-lg ${ hidden[1] ? 'text-gray-800' : 'border-gray-800' }`} onClick={(e) => toggleHidden(1)}>
+                  { history[cursor].p }
+                </button>
+              </div>
+              <div className="py-3 text-4xl">
+                <button className={`p-2 cursor-pointer border rounded-lg ${ hidden[2] ? 'text-gray-800' : 'border-gray-800' }`} onClick={(e) => toggleHidden(2)}>
+                  ({ history[cursor].w }.) { history[cursor].t }
+                </button>
+              </div>
+              <div className="py-3">
+                <span className="text-xs mr-3">{ `${pool.length} words remaining` } - This word is from { history[cursor].d }</span>
+                {/* <span className="cursor-pointer font-bold underline">ignore</span> | <span className="cursor-pointer font-bold underline">remind</span> */}
+              </div>
             </div>
           </div>
         ) }
-        <div className="container mx-auto grid grid-cols-2 gap-4">
+        <div className="container mx-auto">
           <div className="py-5 px-4">
-            <div className="text-xl mb-3">Dataset</div>
-            <div className="ml-4">
+            <div className="text-xl underline mb-3">Dataset</div>
+            <div className="grid grid-cols-6 gap-4">
               <div className="mb-2">
                 <input id="checkboxDatasetHsk1" type="checkbox" className="appearance-none h-4 w-4 border border-2 border-gray-400 rounded-sm bg-white checked:bg-green-500 checked:border-green-500 cursor-pointer transition duration-500 align-top mt-1" checked={dataset.hsk1} onChange={ (e) => { handleChangeDataset(e, 1) }} />
                 <label htmlFor="checkboxDatasetHsk1" className="pl-2 cursor-pointer">HSK1</label>
