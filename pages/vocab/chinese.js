@@ -12,7 +12,7 @@ import hsk6 from '@/data/hsk6.js'
 
 let didInit = false
 
-const initDataset = {
+let initDataset = {
     hsk1: getCookie('vocab_chinese_dataset_hsk1') !== false,
     hsk2: getCookie('vocab_chinese_dataset_hsk2') !== false,
     hsk3: getCookie('vocab_chinese_dataset_hsk3') !== false,
@@ -20,6 +20,16 @@ const initDataset = {
     hsk5: getCookie('vocab_chinese_dataset_hsk5') !== false,
     hsk6: getCookie('vocab_chinese_dataset_hsk6') !== false,
   }
+
+if (! initDataset.hsk1 && ! initDataset.hsk2 && ! initDataset.hsk3 && ! initDataset.hsk4 && ! initDataset.hsk5 && ! initDataset.hsk6) {
+  initDataset = { hsk1: true, hsk2: true, hsk3: true, hsk4: true, hsk5: true, hsk6: true }
+  setCookie('vocab_chinese_dataset_hsk1', true, { expires: new Date('2077-12-31') })
+  setCookie('vocab_chinese_dataset_hsk2', true, { expires: new Date('2077-12-31') })
+  setCookie('vocab_chinese_dataset_hsk3', true, { expires: new Date('2077-12-31') })
+  setCookie('vocab_chinese_dataset_hsk4', true, { expires: new Date('2077-12-31') })
+  setCookie('vocab_chinese_dataset_hsk5', true, { expires: new Date('2077-12-31') })
+  setCookie('vocab_chinese_dataset_hsk6', true, { expires: new Date('2077-12-31') })
+}
 
 const initResetPool = (dataset) => {
   return [].concat(
@@ -72,8 +82,8 @@ export default function Vocab() {
   const handleChangeDataset = (e, index) => {
     dataset[`hsk${index}`] = e.target.checked
     setDataset({ ...dataset })
+    setCookie(`vocab_chinese_dataset_hsk${index}`, e.target.checked, { expires: new Date('2077-12-31') })
     setPool(initResetPool(dataset))
-    setCookie(`vocab_chinese_dataset_hsk${index}`, e.target.checked)
   }
 
   const toggleHidden = (index) => {
@@ -92,13 +102,13 @@ export default function Vocab() {
 
       <main>
         <h1 className="text-4xl text-center text-gray-100 py-5 bg-gray-600">HSK Vocabulary</h1>
-        { history.length > 0 && (
-          <div className="text-center text-white bg-gray-800">
-            <div className="py-5 container mx-auto">
-              <div className="py-4">
-                <button type="button" className="bg-blue-500 hover:bg-blue-600 disabled:bg-gray-400 text-white p-2 rounded mr-3" onClick={prevWord} disabled={cursor >= history.length - 1}>&#60; Prev</button>
-                <button type="button" className="bg-blue-500 hover:bg-blue-600 disabled:bg-gray-400 text-white p-2 rounded" onClick={nextWord} disabled={! pool.length && cursor === 0}>Next &#62;</button>
-              </div>
+        <div className="text-center text-white bg-gray-800">
+          <div className="py-5 container mx-auto">
+            <div className="py-4">
+              <button type="button" className="bg-blue-500 hover:bg-blue-600 disabled:bg-gray-400 text-white p-2 rounded mr-3" onClick={prevWord} disabled={cursor >= history.length - 1}>&#60; Prev</button>
+              <button type="button" className="bg-blue-500 hover:bg-blue-600 disabled:bg-gray-400 text-white p-2 rounded" onClick={nextWord} disabled={! pool.length && cursor === 0}>Next &#62;</button>
+            </div>
+            { history.length > 0 && (<>
               <div className="py-3 text-9xl">
                 <button className={`p-2 cursor-pointer border rounded-lg ${ hidden[0] ? 'text-gray-800' : 'border-gray-800' }`} onClick={(e) => toggleHidden(0)}>
                   { history[cursor].c }
@@ -118,13 +128,13 @@ export default function Vocab() {
                 <span className="text-xs mr-3">{ `${pool.length} words remaining` } - This word is from { history[cursor].d }</span>
                 {/* <span className="cursor-pointer font-bold underline">ignore</span> | <span className="cursor-pointer font-bold underline">remind</span> */}
               </div>
-            </div>
+            </>) }
           </div>
-        ) }
+        </div>
         <div className="container mx-auto">
           <div className="py-5 px-4">
             <div className="text-xl underline mb-3">Dataset</div>
-            <div className="grid grid-cols-6 gap-4">
+            <div className="grid grid-cols-1 gap-4">
               <div className="mb-2">
                 <input id="checkboxDatasetHsk1" type="checkbox" className="appearance-none h-4 w-4 border border-2 border-gray-400 rounded-sm bg-white checked:bg-green-500 checked:border-green-500 cursor-pointer transition duration-500 align-top mt-1" checked={dataset.hsk1} onChange={ (e) => { handleChangeDataset(e, 1) }} />
                 <label htmlFor="checkboxDatasetHsk1" className="pl-2 cursor-pointer">HSK1</label>
