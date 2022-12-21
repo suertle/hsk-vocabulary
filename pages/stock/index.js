@@ -19,7 +19,7 @@ export default function Stock() {
       <main>
         <AuthContext.Consumer>
           {(value) => (
-            <div>{value}</div>
+            <div>{JSON.stringify(value)}</div>
           )}
         </AuthContext.Consumer>
         <div className="flex flex-row z-0">
