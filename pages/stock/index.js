@@ -1,13 +1,22 @@
 import { useEffect } from 'react';
+import { useRouter } from 'next/router'
 import Link from 'next/link'
 import Head from 'next/head'
 import Image from 'next/image'
 
 import Sidebar from '@/components/stock/Sidebar.js'
 
-import { AuthContext } from '../../contexts/AuthContext.js'
+import { useAuth } from '../../contexts/AuthContext.js'
 
 export default function Stock() {
+  const router = useRouter()
+
+  const { user } = useAuth()
+
+  if (user === null) {
+    router.push('/login')
+  }
+
   return (
     <div>
       <Head>
@@ -17,13 +26,7 @@ export default function Stock() {
       </Head>
 
       <main>
-        <AuthContext.Consumer>
-          {(value) => (
-            <div>{JSON.stringify(value)}</div>
-          )}
-        </AuthContext.Consumer>
         <div className="flex flex-row z-0">
-
           <div className="basis-1/5 bg-gray-800 text-white p-3 min-h-screen">
             <Sidebar />
           </div>
