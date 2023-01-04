@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useRouter } from 'next/router'
 import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
@@ -6,6 +7,8 @@ import styles from '../styles/Home.module.css'
 import { useAuth } from '../contexts/AuthContext'
 
 const Login = () => {
+  const router = useRouter()
+
   const { user, login } = useAuth()
 
   const [data, setData] = useState({
@@ -31,10 +34,10 @@ const Login = () => {
     event.preventDefault()
     try {
       await login(data.email, data.password)
+      router.push(router.query.redirect ? router.query.redirect : '/')
     } catch (err) {
       console.log('err', err)
     }
-    console.log(data)
   }
 
   return (

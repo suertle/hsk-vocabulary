@@ -13,30 +13,34 @@ export default function Stock() {
 
   const { user } = useAuth()
 
-  if (user === null) {
-    router.push('/login')
-  }
+  useEffect(() => {
+    if (user === null) {
+      router.push('/login?redirect=/stock')
+    }
+  }, [])
 
-  return (
-    <div>
-      <Head>
-        <title>Stock Market</title>
-        <meta name="description" content="Stock Market Tools" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+  return user === null
+    ? null
+    : (
+      <div>
+        <Head>
+          <title>Stock Market</title>
+          <meta name="description" content="Stock Market Tools" />
+          <link rel="icon" href="/favicon.ico" />
+        </Head>
 
-      <main>
-        <div className="flex flex-row z-0">
-          <div className="basis-1/5 bg-gray-800 text-white p-3 min-h-screen">
-            <Sidebar />
+        <main>
+          <div className="flex flex-row z-0">
+            <div className="basis-1/5 bg-gray-800 text-white p-3 min-h-screen">
+              {/*<Sidebar />*/}
+            </div>
+
+            <div className="basis-3/5 p-3">
+              <h2 className="text-xl">tools</h2>
+            </div>
+
           </div>
-
-          <div className="basis-3/5 p-3">
-            <h2 className="text-xl">Stock tools</h2>
-          </div>
-
-        </div>
-      </main>
-    </div>
-  )
+        </main>
+      </div>
+    )
 }

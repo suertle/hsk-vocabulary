@@ -4,14 +4,11 @@ import { onAuthStateChanged, signInWithEmailAndPassword, signOut } from 'firebas
 import { auth } from '../config/firebase'
 
 export const AuthContext = createContext({})
-
 export const useAuth = () => useContext(AuthContext)
 
 export const AuthContextProvider = ({ children }) => {
   const router = useRouter()
-  console.log(router)
-  const [user, setUser] = useState(null)
-  const [loading, setLoading] = useState(true)
+  const [user, setUser] = useState(undefined)
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -24,9 +21,7 @@ export const AuthContextProvider = ({ children }) => {
       } else {
         setUser(null)
       }
-      setLoading(false)
     })
-
     return () => unsubscribe()
   }, [])
 
@@ -46,7 +41,7 @@ export const AuthContextProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider value={{ user, login, logout }}>
-      { loading ? null : children }
+      { children }
     </AuthContext.Provider>
   )
 }
