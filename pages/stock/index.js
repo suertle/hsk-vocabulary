@@ -14,12 +14,12 @@ export default function Stock() {
   const { user } = useAuth()
 
   useEffect(() => {
-    if (user === null) {
+    if (user === undefined || user === null) {
       router.push('/login?redirect=/stock')
     }
   }, [])
 
-  return user === null
+  return user === undefined || user === null
     ? null
     : (
       <div>

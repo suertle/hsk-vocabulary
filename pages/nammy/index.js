@@ -6,9 +6,7 @@ import Image from 'next/image'
 
 import { useAuth } from '../../contexts/AuthContext.js'
 import { database } from '@/config/firebase.js'
-import { collection, getDocs } from "firebase/firestore"; 
-
-console.log(database)
+import { collection, getDocs } from 'firebase/firestore'
 
 export default function Stock() {
 
@@ -20,19 +18,19 @@ export default function Stock() {
     getDocs(collection(database, "nammy_teachings"))
     .then(querySnapshot => {
       querySnapshot.forEach((doc) => {
-        console.log(`${doc.id} => ${doc.data().started_at}`);
-      });
+        console.log(`${doc.id} => ${doc.data().started_at}`)
+      })
     })
   }, [])
 
-
   useEffect(() => {
-    if (user === null) {
+    console.log(user)
+    if (user === undefined || user === null) {
       router.push('/login?redirect=/nammy')
     }
   }, [])
 
-  return user === null
+  return user === undefined || user === null
     ? null
     : (
       <div>
