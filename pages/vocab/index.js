@@ -8,7 +8,7 @@ export default function Chinese() {
 
   useEffect(() => {
     router.push('/vocab/chinese');
-  }, []);
+  });
 
   return (
     <div>Loading...</div>

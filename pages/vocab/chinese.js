@@ -57,7 +57,7 @@ export default function Vocab() {
       didInit = true
       nextWord()
     }
-  }, [])
+  })
 
   const prevWord = () => {
     if (cursor < history.length - 1) {
