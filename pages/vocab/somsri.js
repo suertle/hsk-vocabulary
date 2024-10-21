@@ -52,7 +52,7 @@ export default function Somsri() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <div className="h-screen bg-pink-800">
+      <div className="min-h-screen bg-pink-800">
         <div className="container mx-auto px-5">
 
           <div className="text-amber-200">
